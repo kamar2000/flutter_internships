@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_second/shared/components/applocal.dart';
 import 'package:flutter_second/shared/cubit/cubit.dart';
 
 import '../styles/colors.dart';
@@ -177,14 +178,14 @@ Widget tasksBuilder({
   fallback: (context) => Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children:  [
         Icon(
           Icons.menu,
           size: 100.0,
           color: Colors.grey,
         ),
         Text(
-          'No Tasks Yet, Please Add Some Tasks',
+          '${getLang(context, 'no')}',
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,13 +13,17 @@ class ArchivedTasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCupit,AppStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+
+      },
       builder: (context,state){
 
         var tasks = AppCupit.get(context).archivedTasks;
-        return  tasksBuilder(
+        return ConditionalBuilder(condition:state is! AppGetDatabaseLoadingState ,builder: (context) =>  tasksBuilder(
           tasks: tasks,
-        );
+        ), fallback:(context) => Center(child: CircularProgressIndicator(),) );
+
+
       },
     );
   }

@@ -104,6 +104,7 @@ class AppCupit extends Cubit<AppStates> {
     required String status,
     required int id,
   }) async {
+    emit(AppGetDatabaseLoadingState());
     database.rawUpdate(
         'UPDATE tasks SET status = ? WHERE id = ?', [status, id]).then((value) {
       getDataFromDatabase(database);

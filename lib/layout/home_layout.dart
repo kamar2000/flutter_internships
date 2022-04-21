@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_second/cupit/cupit.dart';
+import 'package:flutter_second/shared/components/applocal.dart';
 import 'package:flutter_second/shared/components/constants.dart';
 import 'package:flutter_second/shared/cubit/cubit.dart';
 import 'package:flutter_second/shared/cubit/states.dart';
@@ -32,6 +33,7 @@ class HomeLayout extends StatelessWidget {
       create: (context) => AppCupit()..createDatabase(),
       child: BlocConsumer<AppCupit, AppStates>(
         listener: (BuildContext context, AppStates state) {
+
           if (state is AppInsertDatabaseState) {
             Navigator.pop(context);
           }
@@ -39,7 +41,9 @@ class HomeLayout extends StatelessWidget {
         builder: (BuildContext context, AppStates state) {
           AppCupit cupit = AppCupit.get(context);
 
-          return Scaffold(
+          return
+
+            Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
               title: Text(
@@ -193,24 +197,24 @@ class HomeLayout extends StatelessWidget {
               onTap: (index) {
                 cupit.ChaneIndex(index);
               },
-              items: const [
+              items:  [
                 BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.menu,
                   ),
-                  label: 'Tasks',
+                  label:'${getLang(context, 'Tasks')}',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.check_circle_outline,
                   ),
-                  label: 'Done',
+                  label:'${getLang(context, 'Done')}',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.archive_outlined,
                   ),
-                  label: 'Archive',
+                  label:'${getLang(context, 'Archive')}',
                 ),
               ],
             ),
@@ -225,6 +229,8 @@ class HomeLayout extends StatelessWidget {
               ),
             ),
           );
+
+
         },
       ),
     );

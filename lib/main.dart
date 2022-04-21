@@ -1,23 +1,30 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_second/layout/home_layout.dart';
 import 'package:flutter_second/modules/counter/counter_screen.dart';
 import 'package:flutter_second/modules/login/login_screen.dart';
 import 'package:flutter_second/shared/bloc_observer.dart';
+import 'package:flutter_second/shared/components/applocal.dart';
 import 'package:flutter_second/shared/cubit/cubit.dart';
 import 'package:flutter_second/shared/cubit/states.dart';
 import 'package:flutter_second/shared/styles/colors.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'cupit/cupit.dart';
 import 'cupit/states.dart';
 import 'modules/bmi/bmi_screen.dart';
 import 'modules/driver_screen/driver_screen.dart';
 import 'modules/messenger/messenger_screen.dart';
+SharedPreferences ?mySharedPreferences;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  mySharedPreferences = await SharedPreferences.getInstance();
   BlocOverrides.runZoned(
     () {
+
       runApp(const MyApp());
     },
     blocObserver: MyBlocObserver(),
@@ -88,6 +95,25 @@ class MyApp extends StatelessWidget {
             ),
             themeMode: AppMainCupit.get(context).isDark ? ThemeMode.dark : ThemeMode.light,
             home: HomeLayout(),
+            localizationsDelegates: const [
+              AppLocale.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('en', ''), Locale('ar', '')],
+            localeResolutionCallback: (currentLang, supportLang) {
+              if (currentLang != null) {
+                for (Locale local in supportLang) {
+                  if (local.languageCode == currentLang.languageCode) {
+                    mySharedPreferences!
+                        .setString('lang', currentLang.languageCode);
+                    return currentLang;
+                  }
+                }
+              }
+              return supportLang.first;
+            },
+
           );
         },
       ),
