@@ -3,18 +3,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_second/cupit/cupit.dart';
+import 'package:flutter_second/layout/todo_app/cubit/states.dart';
 import 'package:flutter_second/shared/components/applocal.dart';
 import 'package:flutter_second/shared/components/constants.dart';
-import 'package:flutter_second/shared/cubit/cubit.dart';
-import 'package:flutter_second/shared/cubit/states.dart';
+
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../main.dart';
-import '../modules/archived_tasks/archived_tasks_screen.dart';
-import '../modules/done_tasks/done_tasks_screen.dart';
-import '../modules/new_tasks/new_tasks_screen.dart';
-import '../shared/components/components.dart';
+import '../../main.dart';
+import '../../modules/archived_tasks/archived_tasks_screen.dart';
+import '../../modules/done_tasks/done_tasks_screen.dart';
+import '../../modules/new_tasks/new_tasks_screen.dart';
+import '../../shared/components/components.dart';
+import 'cubit/cubit.dart';
 import 'my_header_drawer.dart';
 
 class HomeLayout extends StatelessWidget {
@@ -39,15 +40,17 @@ class HomeLayout extends StatelessWidget {
           }
         },
         builder: (BuildContext context, AppStates state) {
-          AppCupit cupit = AppCupit.get(context);
+          AppCupit cubit = AppCupit.get(context);
 
           return
 
             Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
-              title: Text(
-                cupit.titles[cupit.currentIndex],
+              title: Center(
+                child: Text(
+                  cubit.titles[cubit.currentIndex],
+                ),
               ),
               actions: [
                 IconButton(
@@ -59,17 +62,17 @@ class HomeLayout extends StatelessWidget {
               ],
             ),
             body:
-                // cupit.newTasks.isEmpty
+                // cubit.newTasks.isEmpty
                 //     ? const Center(child: CircularProgressIndicator())
                 //     :
-                cupit.screens[cupit.currentIndex],
+            cubit.screens[cubit.currentIndex],
             floatingActionButton: Visibility(
-              visible: cupit.fab,
+              visible: cubit.fab,
               child: FloatingActionButton(
                 onPressed: () {
-                  if (cupit.isBottomSheetShown) {
+                  if (cubit.isBottomSheetShown) {
                     if (formKey.currentState!.validate()) {
-                      cupit.insertToDatabase(
+                      cubit.insertToDatabase(
                         title: titleController.text,
                         date: dateController.text,
                         time: timeController.text,
@@ -172,7 +175,7 @@ class HomeLayout extends StatelessWidget {
                         )
                         .closed
                         .then((value) {
-                      cupit.changeBottomSheetState(
+                      cubit.changeBottomSheetState(
                         isShow: false,
                         icon: Icons.edit,
                       );
@@ -180,22 +183,22 @@ class HomeLayout extends StatelessWidget {
                       dateController.text = '';
                       titleController.text = '';
                     });
-                    cupit.changeBottomSheetState(
+                    cubit.changeBottomSheetState(
                       isShow: true,
                       icon: Icons.add,
                     );
                   }
                 },
                 child: Icon(
-                  cupit.fabIcon,
+                  cubit.fabIcon,
                 ),
               ),
             ),
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
-              currentIndex: cupit.currentIndex,
+              currentIndex: cubit.currentIndex,
               onTap: (index) {
-                cupit.ChaneIndex(index);
+                cubit.ChaneIndex(index);
               },
               items:  [
                 BottomNavigationBarItem(
@@ -216,6 +219,13 @@ class HomeLayout extends StatelessWidget {
                   ),
                   label:'${getLang(context, 'Archive')}',
                 ),
+                const BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.bar_chart_sharp,
+                  ),
+                  label: 'Charts',
+                ),
+
               ],
             ),
             drawer: Drawer(
