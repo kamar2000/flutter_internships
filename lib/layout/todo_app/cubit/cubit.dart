@@ -1,29 +1,34 @@
-// ignore_for_file: avoid_print, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_second/shared/cubit/states.dart';
+import 'package:flutter_second/layout/todo_app/cubit/states.dart';
+
 import 'package:sqflite/sqflite.dart';
 
-import '../../modules/archived_tasks/archived_tasks_screen.dart';
-import '../../modules/done_tasks/done_tasks_screen.dart';
-import '../../modules/new_tasks/new_tasks_screen.dart';
+import '../../../modules/archived_tasks/archived_tasks_screen.dart';
+import '../../../modules/bar_chart/charts_screen.dart';
+import '../../../modules/done_tasks/done_tasks_screen.dart';
+import '../../../modules/new_tasks/new_tasks_screen.dart';
 
-class AppCupit extends Cubit<AppStates> {
-  AppCupit() : super(AppInitialState());
+class AppCubit extends Cubit<AppStates> {
+  AppCubit() : super(AppInitialState());
 
-  static AppCupit get(context) => BlocProvider.of(context);
+  static AppCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
   List<Widget> screens = [
     const NewTasksScreen(),
     const DoneTasksScreen(),
     const ArchivedTasksScreen(),
+     ChartsTaskScreen(),
+
   ];
   List<String> titles = [
     'New Tasks',
     'Done Tasks',
     'Archived Tasks',
+    'Bar Chart',
+
   ];
   void ChaneIndex(int index) {
     currentIndex = index;
@@ -87,6 +92,7 @@ class AppCupit extends Cubit<AppStates> {
     archivedTasks = [];
     emit(AppGetDatabaseLoadingState());
     database.rawQuery('SELECT *FROM tasks').then((value) {
+      print(value);
       value.forEach((element) {
         if (element['status'] == 'new') {
           newTasks.add(element);

@@ -1,9 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_second/shared/components/applocal.dart';
-import 'package:flutter_second/shared/cubit/cubit.dart';
 
-import '../styles/colors.dart';
+import '../../layout/todo_app/cubit/cubit.dart';
 
 Widget defaultButtom({
   double width = double.infinity,
@@ -83,19 +81,17 @@ Widget defaultFormField({
 }
 
 Widget buildTaskItem(Map model, context) => Dismissible(
-      key: Key(model['id'].toString() ),
+      key: Key(model['id'].toString()),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
             CircleAvatar(
               radius: 40.0,
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Colors.lightBlue,
               child: Text(
                 '${model['time']}',
-                style: const TextStyle(
-                  color: Colors.white
-                ),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(
@@ -128,18 +124,18 @@ Widget buildTaskItem(Map model, context) => Dismissible(
                 color: Colors.green,
               ),
               onPressed: () {
-                AppCupit.get(context).updateData(
+                AppCubit.get(context).updateData(
                   status: 'done',
                   id: model['id'],
                 );
               },
             ),
             IconButton(
-              icon:  const Icon(
+              icon: const Icon(
                 Icons.archive,
               ),
               onPressed: () {
-                AppCupit.get(context).updateData(
+                AppCubit.get(context).updateData(
                   status: 'archive',
                   id: model['id'],
                 );
@@ -149,21 +145,45 @@ Widget buildTaskItem(Map model, context) => Dismissible(
         ),
       ),
       onDismissed: (direction) {
-        AppCupit.get(context).deleteData(id: model['id']);
+        AppCubit.get(context).deleteData(id: model['id']);
       },
     );
 
-
 Widget tasksBuilder({
   required List<Map> tasks,
-}) => ConditionalBuilder(
-  condition: tasks.isNotEmpty,
-  builder: (context) => ListView.separated(
-    itemBuilder: (context, index)
-    {
-      return buildTaskItem(tasks[index], context);
-    },
-    separatorBuilder: (context, index) => Padding(
+}) =>
+    ConditionalBuilder(
+      condition: tasks.isNotEmpty,
+      builder: (context) => ListView.separated(
+        itemBuilder: (context, index) {
+          return buildTaskItem(tasks[index], context);
+        },
+        separatorBuilder: (context, index) => myDivider(),
+        itemCount: tasks.length,
+      ),
+      fallback: (context) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(
+              Icons.menu,
+              size: 100.0,
+              color: Colors.grey,
+            ),
+            Text(
+              'No Tasks Available',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+Widget myDivider() => Padding(
       padding: const EdgeInsetsDirectional.only(
         start: 20.0,
       ),
@@ -172,27 +192,5 @@ Widget tasksBuilder({
         height: 1.0,
         color: Colors.grey[300],
       ),
-    ),
-    itemCount: tasks.length,
-  ),
-  fallback: (context) => Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children:  [
-        Icon(
-          Icons.menu,
-          size: 100.0,
-          color: Colors.grey,
-        ),
-        Text(
-          '${getLang(context, 'no')}',
-          style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
-        ),
-      ],
-    ),
-  ),
-);
+    );
+
