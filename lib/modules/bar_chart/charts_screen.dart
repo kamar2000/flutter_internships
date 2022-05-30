@@ -15,7 +15,7 @@ class ChartsTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   int  x1=0;int x2=0;int x3=0;int x4=0;int x5=0;int x6=0;int x7=0;int x8=0;int x9=0;int x10=0;int x11=0;int x12=0;
-    AppCupit.get(context).doneTasks.forEach((element) {
+    AppCubit.get(context).doneTasks.forEach((element) {
       if (element['date'].toString().substring(0, 3) == 'Jan') {
         x1 ++;
       } else if (element['date'].toString().substring(0, 3) == 'Feb') {
@@ -105,7 +105,7 @@ class ChartsTaskScreen extends StatelessWidget {
         color: charts.ColorUtil.fromDartColor(Colors.greenAccent),
       ),
     ];
-    return BlocConsumer<AppCupit, AppStates>(
+    return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
         List<charts.Series<BarChartModel, String>> series = [

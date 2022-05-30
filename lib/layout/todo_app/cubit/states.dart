@@ -20,6 +20,8 @@ class AppInsertDatabaseState extends AppStates {}
 
 class AppChangeBottomSheetState extends AppStates{}
 
+class AppChangeModeState extends AppStates{}
+
 class AppShowFab extends AppStates {}
 
 class AppHideFab extends AppStates {}

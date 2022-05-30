@@ -10,26 +10,25 @@ import '../../../modules/archived_tasks/archived_tasks_screen.dart';
 import '../../../modules/bar_chart/charts_screen.dart';
 import '../../../modules/done_tasks/done_tasks_screen.dart';
 import '../../../modules/new_tasks/new_tasks_screen.dart';
+import '../../../shared/network/local/cache_helper.dart';
 
-class AppCupit extends Cubit<AppStates> {
-  AppCupit() : super(AppInitialState());
+class AppCubit extends Cubit<AppStates> {
+  AppCubit() : super(AppInitialState());
 
-  static AppCupit get(context) => BlocProvider.of(context);
+  static AppCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
   List<Widget> screens = [
     const NewTasksScreen(),
     const DoneTasksScreen(),
     const ArchivedTasksScreen(),
-     ChartsTaskScreen(),
-
+    ChartsTaskScreen(),
   ];
   List<String> titles = [
     'New Tasks',
     'Done Tasks',
     'Archived Tasks',
     'Bar Chart',
-
   ];
   void ChaneIndex(int index) {
     currentIndex = index;
@@ -122,8 +121,7 @@ class AppCupit extends Cubit<AppStates> {
   void deleteData({
     required int id,
   }) async {
-    database.rawDelete(
-        'Delete From tasks WHERE id = ?', [id]).then((value) {
+    database.rawDelete('Delete From tasks WHERE id = ?', [id]).then((value) {
       getDataFromDatabase(database);
       emit(AppDeleteDatabaseState());
     });
@@ -150,5 +148,18 @@ class AppCupit extends Cubit<AppStates> {
     fabIcon = icon;
 
     emit(AppChangeBottomSheetState());
+  }
+
+  bool isDark = false;
+  void changeAppMode({bool? fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
+      emit(AppChangeModeState());
+    } else {
+      isDark = !isDark;
+      CacheHelper.setBoolean(key: 'isDark', value: isDark).then((value) {
+        emit(AppChangeModeState());
+      });
+    }
   }
 }
