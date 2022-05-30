@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 20.0,
                   ),
-                  defaultButtom(
+                  defaultButton(
                     text: 'login',
                     isUpperCase: false,
                     function: () {

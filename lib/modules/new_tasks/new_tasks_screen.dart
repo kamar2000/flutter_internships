@@ -12,11 +12,11 @@ class NewTasksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCupit,AppStates>(
+    return BlocConsumer<AppCubit,AppStates>(
       listener: (context, state) {},
       builder: (context,state){
 
-        var tasks = AppCupit.get(context).newTasks;
+        var tasks = AppCubit.get(context).newTasks;
         return tasksBuilder(
           tasks: tasks,
         );

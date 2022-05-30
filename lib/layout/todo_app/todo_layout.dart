@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_second/cupit/cupit.dart';
 import 'package:flutter_second/layout/todo_app/cubit/states.dart';
 import 'package:flutter_second/shared/components/applocal.dart';
 import 'package:flutter_second/shared/components/constants.dart';
@@ -31,8 +30,8 @@ class HomeLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AppCupit()..createDatabase(),
-      child: BlocConsumer<AppCupit, AppStates>(
+      create: (context) => AppCubit()..createDatabase(),
+      child: BlocConsumer<AppCubit, AppStates>(
         listener: (BuildContext context, AppStates state) {
 
           if (state is AppInsertDatabaseState) {
@@ -40,7 +39,7 @@ class HomeLayout extends StatelessWidget {
           }
         },
         builder: (BuildContext context, AppStates state) {
-          AppCupit cubit = AppCupit.get(context);
+          AppCubit cubit = AppCubit.get(context);
 
           return
 
@@ -55,7 +54,7 @@ class HomeLayout extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    AppMainCupit.get(context).changeAppMode();
+                    AppCubit.get(context).changeAppMode();
                   },
                   icon: const Icon(Icons.brightness_4_rounded),
                 )

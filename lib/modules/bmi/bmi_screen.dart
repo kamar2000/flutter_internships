@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_second/shared/components/components.dart';
 
 import '../bmi_result/bmi_result_screen.dart';
 class BmiScreen extends StatefulWidget {
@@ -290,15 +291,11 @@ class _BmiScreenState extends State<BmiScreen> {
               onPressed: (){
                 double result= weight / pow(height/ 100 ,2);
                 print(result.round());
-              Navigator.push(context,
-                  MaterialPageRoute(
-                    builder:(context) => BMIResultScreen(
-                      age: age,
-                      result: result.round(),
-                      isMale: isMale,
-                    ),
-                  ),
-              );
+             navigateTo(context,  BMIResultScreen(
+               age: age,
+               result: result.round(),
+               isMale: isMale,
+             ),);
             },
               height: 50.0,
             child: Text(
